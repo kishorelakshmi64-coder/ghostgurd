@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GhostGuard – Instagram Security Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand"><span class="logo">▣</span><div><b>GhostGuard</b><small>Instagram security toolkit</small></div></div>
+    <nav>
+      <button class="on" data-view="home">Overview</button>
+      <button data-view="fake">Account Check</button>
+      <button data-view="scam">Scam Detector</button>
+      <button data-view="report">Report Assistant</button>
+    </nav>
+    <p class="side-note">Demo mode. Everything runs in your browser. Nothing is sent anywhere.</p>
+  </aside>
+
+  <main>
+    <header class="top">
+      <button class="menu" id="menuBtn" aria-label="Open menu">☰</button>
+      <span class="badge">Demo analysis · not verified</span>
+    </header>
+
+    <section class="view active" id="view-home">
+      <h1>Check before you trust.</h1>
+      <p class="lead">Spot fake accounts, scams and phishing on Instagram, then report them the right way.</p>
+      <div class="cards">
+        <button class="card" data-view="fake"><h3>Account Check</h3><p>Score the warning signs on a public profile.</p></button>
+        <button class="card" data-view="scam"><h3>Scam Detector</h3><p>Scan a message, bio or link for phishing patterns.</p></button>
+        <button class="card" data-view="report"><h3>Report Assistant</h3><p>Get Instagram’s official steps and an evidence checklist.</p></button>
+      </div>
+      <div class="panel">
+        <h3>Demo analysis vs verified results</h3>
+        <p><b class="g">Demo analysis</b> – rule-based checks on what you type in. It gives a risk estimate, never a verdict.</p>
+        <p><b class="g">Verified result</b> – only Instagram can confirm whether an account is fake or breaks its rules. This toolkit never reads private data, never logs in and never reports for you.</p>
+      </div>
+    </section>
+
+    <section class="view" id="view-fake">
+      <h2>Account Check</h2>
+      <p class="lead">Enter what you can see on a public profile. More details give a more reliable estimate.</p>
+      <form id="fakeForm" class="panel" novalidate>
+        <label>Username or public profile URL<input id="fUser" placeholder="@username or instagram.com/username" autocomplete="off" maxlength="200"></label>
+        <div class="grid3">
+          <label>Followers<input id="fFo" type="number" min="0" inputmode="numeric"></label>
+          <label>Following<input id="fFg" type="number" min="0" inputmode="numeric"></label>
+          <label>Posts<input id="fPo" type="number" min="0" inputmode="numeric"></label>
+        </div>
+        <label>Account age (from “About this account”)
+          <select id="fAge"><option value="">Unknown</option><option value="new">Under 1 month</option><option value="young">1–6 months</option><option value="mid">6 months – 2 years</option><option value="old">Over 2 years</option></select>
+        </label>
+        <fieldset><legend>What you can see</legend><div id="fChecks"></div></fieldset>
+        <p class="err" id="fErr" role="alert"></p>
+        <div class="row"><button class="btn" type="submit" id="fBtn">Run demo analysis</button><button class="btn ghost" type="reset" id="fReset">Clear</button></div>
+      </form>
+      <div id="fakeOut" aria-live="polite"></div>
+    </section>
+
+    <section class="view" id="view-scam">
+      <h2>Scam Detector</h2>
+      <p class="lead">Paste a suspicious message, bio or link. Links are analyzed as text and never opened.</p>
+      <form id="scamForm" class="panel" novalidate>
+        <label>Message or bio text<textarea id="sText" rows="5" maxlength="2000" placeholder="Paste the text here"></textarea></label>
+        <label>Link<input id="sUrl" placeholder="https://example.com/login" autocomplete="off" maxlength="500"></label>
+        <p class="err" id="sErr" role="alert"></p>
+        <div class="row"><button class="btn" type="submit" id="sBtn">Scan for scam signs</button><button class="btn ghost" type="reset" id="sReset">Clear</button></div>
+      </form>
+      <div id="scamOut" aria-live="polite"></div>
+    </section>
+
+    <section class="view" id="view-report">
+      <h2>Report Assistant</h2>
+      <p class="lead">Pick what’s happening. You submit the report yourself, inside Instagram.</p>
+      <div id="cats" class="chips"></div>
+      <div class="two">
+        <div class="panel"><h3 id="stepsTitle"></h3><ol id="steps"></ol><p class="tip" id="tip"></p>
+          <a class="btn ghost" href="https://help.instagram.com" target="_blank" rel="noopener noreferrer">Open Instagram Help Center</a></div>
+        <div class="panel"><h3>Evidence checklist</h3><ul id="checklist" class="checks"></ul><button class="btn ghost" id="chkReset" type="button">Reset checklist</button></div>
+      </div>
+      <form id="notesForm" class="panel" novalidate>
+        <h3>Report notes</h3>
+        <p class="fine">For your own records. Copy details into Instagram’s form if it asks.</p>
+        <label>Account you’re reporting (optional)<input id="rUser" placeholder="@username" autocomplete="off" maxlength="200"></label>
+        <label>What happened<textarea id="rDesc" rows="4" maxlength="1500"></textarea></label>
+        <p class="err" id="rErr" role="alert"></p>
+        <div class="row"><button class="btn" type="submit">Build notes</button><button class="btn ghost" type="button" id="copyNotes">Copy</button><button class="btn ghost" type="button" id="dlNotes">Download .txt</button></div>
+        <textarea id="rNotes" rows="8" readonly aria-label="Generated notes"></textarea>
+      </form>
+    </section>
+
+    <section class="term" aria-label="Terminal">
+      <div class="term-out" id="termOut"></div>
+      <form id="termForm" class="term-in"><span class="pr">&gt;</span><input id="termIn" placeholder="type help" autocomplete="off" aria-label="Terminal command"></form>
+    </section>
+  </main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
